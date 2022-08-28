@@ -23,3 +23,9 @@ export type AccountInfo = {
   secretKey: string;
 };
 
+export type Transaction = {
+  txnId: string;
+  sender: number;
+  reciever: number;
+  amount: number;
+};
