@@ -11,7 +11,10 @@ export type TransactionResponse = {
   txnId: string;
   verdict: boolean;
   message?: string;
-} & TransactionRequest;
+  sender: number;
+  reciever: number;
+  amount: number;
+};
 
 export type AccountInfo = {
   id: number;
@@ -20,9 +23,3 @@ export type AccountInfo = {
   secretKey: string;
 };
 
-export type Transaction = {
-  txnId: string;
-  sender: number;
-  reciever: number;
-  amount: number;
-};

@@ -5,15 +5,19 @@ import {
   getBankInformation,
   incrementBalance,
 } from "../../lib/hasura_query";
-import { AccountInfo } from "../../lib/types";
+import {
+  AccountInfo,
+  TransactionRequest,
+  TransactionResponse,
+} from "../../lib/types";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    const { sender, reciever, amount, secretKey } = req.body;
-
+    const { sender, reciever, amount, secretKey }: TransactionRequest =
+      req.body;
     const { data } = await client.query({
       query: getBankInformation([sender, reciever]),
     });
@@ -25,7 +29,7 @@ export default async function handler(
         accounts[accountNumber] = { balance, secretKey };
       }
     );
-    console.log(accounts);
+    console.log(accounts, sender, reciever);
     // @ts-ignore
     if (accounts[sender] && accounts[reciever]) {
       // @ts-ignore
@@ -44,15 +48,15 @@ export default async function handler(
           const res3 = await client.mutate({
             mutation: addTransaction({ amount, txnId, reciever, sender }),
           });
-
-          return res.status(200).json({
+          const txn: TransactionResponse = {
             txnId,
             sender,
             reciever,
             amount,
             verdict: true,
             message: "Transaction Successful!",
-          });
+          };
+          return res.status(200).json(txn);
         }
         return res
           .status(200)
