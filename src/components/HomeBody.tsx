@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col } from "antd";
 import bodyStyle from "./homeBody.module.css";
 import Image from "next/image";
 import Logo from "../../public/BankLogo.png";
 import InputCard from "./InputCard";
 import Button from "../ui-base-components/Button";
+import { BankInfo } from "../../lib/types";
 
 function HomeBody() {
+  const [bankInfo, setBankInfo] = useState<Partial<BankInfo>>({});
+
+  const handleSubmit = async () => {
+    const res = await fetch("/api/bankBalance", {
+      method: "POST",
+      body: JSON.stringify(bankInfo),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const body = await res.json();
+    if (body.status === true) {
+      alert(body.balance);
+    } else {
+      console.log(body.message);
+    }
+  };
+
   return (
     <div className={bodyStyle.homeBody}>
       <Row>
@@ -16,12 +35,12 @@ function HomeBody() {
       </Row>
       <Row>
         <Col span={6} offset={9} className={bodyStyle.inputCard}>
-          <InputCard/>
+          <InputCard bankInfo={bankInfo} setBankInfo={setBankInfo} />
         </Col>
       </Row>
       <Row>
         <Col span={2} offset={11}>
-          <Button style={{marginTop: "15px"}}>
+          <Button onClick={handleSubmit} style={{ marginTop: "15px" }}>
             ব্যালেন্স দেখুন
           </Button>
         </Col>

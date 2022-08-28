@@ -53,3 +53,16 @@ export const addTransaction = ({
     }
   `;
 };
+
+export const getBalance = (id: number) => {
+  return `
+  query MyQuery {
+    bank_account(where: {accountNumber: {_eq: ${id}}}) {
+      accountNumber
+      balance
+      name
+      secretKey
+    }
+  }
+  `;
+};

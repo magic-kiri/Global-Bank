@@ -29,3 +29,13 @@ export type Transaction = {
   reciever: number;
   amount: number;
 };
+
+export type BankInfo = {
+  accountNumber: number;
+  secretKey: string;
+};
+
+export type BankInfoResponse = {
+  balance: number;
+  name: string;
+}& BankInfo
