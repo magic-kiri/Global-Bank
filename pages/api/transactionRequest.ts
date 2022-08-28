@@ -11,6 +11,20 @@ import {
   TransactionResponse,
 } from "../../lib/types";
 
+const fetchBankInformation = async (idList: number[]) => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_DB_ENDPOINT}`, {
+    method: "POST",
+    body: JSON.stringify({
+      query: getBankInformation(idList),
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      authorization: `Bearer ${process.env.TOKEN}`,
+    },
+  });
+  return await response.json();
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -18,9 +32,7 @@ export default async function handler(
   try {
     const { sender, reciever, amount, secretKey }: TransactionRequest =
       req.body;
-    const { data } = await client.query({
-      query: getBankInformation([sender, reciever]),
-    });
+    const { data } = await fetchBankInformation([sender, reciever]);
     const { bank_account } = data;
     let accounts = {};
     bank_account.forEach(
@@ -34,8 +46,8 @@ export default async function handler(
     if (accounts[sender] && accounts[reciever]) {
       // @ts-ignore
       if (accounts[sender].secretKey === secretKey) {
+        console.log(accounts[sender.toString()].balance, amount);
         // @ts-ignore
-        // console.log(accounts[sender.toString()] , sender);
         if (accounts[sender].balance >= amount) {
           // Create a 8-digit random string
           const txnId: string = (Math.random() + 1).toString(36).substring(4);

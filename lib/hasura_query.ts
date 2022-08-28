@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 import { Transaction } from "./types";
 
 export const getBankInformation = (idList: number[]) => {
-  return gql`
+  return `
     query MyQuery {
       bank_account(where: { accountNumber: { _in: [${idList.toString()}] } }) {
         accountNumber
