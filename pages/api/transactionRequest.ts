@@ -46,6 +46,8 @@ export default async function handler(
     if (accounts[sender] && accounts[reciever]) {
       // @ts-ignore
       if (accounts[sender].secretKey === secretKey) {
+
+        // @ts-ignore
         console.log(accounts[sender.toString()].balance, amount);
         // @ts-ignore
         if (accounts[sender].balance >= amount) {
