@@ -6,6 +6,7 @@ import Logo from "../../public/BankLogo.png";
 import InputCard from "./InputCard";
 import Button from "../ui-base-components/Button";
 import { BankInfo } from "../../lib/types";
+import {success, error} from "../ui-base-components/Modal";
 
 function HomeBody() {
   const [bankInfo, setBankInfo] = useState<Partial<BankInfo>>({});
@@ -19,10 +20,14 @@ function HomeBody() {
       },
     });
     const body = await res.json();
+    //console.log(body);
     if (body.status === true) {
-      alert(body.balance);
+      //alert(body.balance);
+      
+      success('দারুণ!',`আপনার বর্তমান ব্যালেন্স ${body.balance}৳`)
     } else {
       console.log(body.message);
+      error('দুঃখিত!', 'দয়া করে আবার চেষ্টা করুন।')
     }
   };
 
