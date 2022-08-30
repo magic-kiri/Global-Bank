@@ -6,12 +6,25 @@ import Logo from "../../public/BankLogo.png";
 import InputCard from "./InputCard";
 import Button from "../ui-base-components/Button";
 import { BankInfo } from "../../lib/types";
-import {success, error} from "../ui-base-components/Modal";
+import { success, error } from "../ui-base-components/Modal";
 
 function HomeBody() {
   const [bankInfo, setBankInfo] = useState<Partial<BankInfo>>({});
 
+  const checkInputs = () => {
+    if (!bankInfo.accountNumber)
+      return { status: false, message: "একাউন্ট নম্বরটি সঠিক নয়!" };
+    if (!bankInfo.secretKey)
+      return { status: false, message: "পাসওার্ডটি সঠিক নয়" };
+    return { status: true, message: "Ok" };
+  };
+
   const handleSubmit = async () => {
+    const { status, message } = checkInputs();
+    if (!status) {
+      return error("দুঃখিত!", message);
+    }
+
     const res = await fetch("/api/bankBalance", {
       method: "POST",
       body: JSON.stringify(bankInfo),
@@ -23,11 +36,11 @@ function HomeBody() {
     //console.log(body);
     if (body.status === true) {
       //alert(body.balance);
-      
-      success('দারুণ!',`আপনার বর্তমান ব্যালেন্স ${body.balance}৳`)
+
+      success("দারুণ!", `আপনার বর্তমান ব্যালেন্স ${body.balance}৳`);
     } else {
       console.log(body.message);
-      error('দুঃখিত!', 'দয়া করে আবার চেষ্টা করুন।')
+      error("দুঃখিত!", body.message);
     }
   };
 

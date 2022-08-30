@@ -21,7 +21,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    console.log("triggering backend!!");
     const { accountNumber, secretKey }: BankInfo = req.body;
     const { data } = await fetchBankInformation(accountNumber);
     const bank_account: BankInfoResponse[] = data.bank_account;
@@ -33,11 +32,11 @@ export default async function handler(
       else
         return res
           .status(200)
-          .json({ status: false, message: "Invalid Password!" });
+          .json({ status: false, message: "ভুল পাসওয়ার্ড" });
     } else
       return res
         .status(200)
-        .json({ status: false, message: "No such account!" });
+        .json({ status: false, message: "উক্ত একাউন্ট নেই" });
   } catch (err) {
     console.log(err);
   }

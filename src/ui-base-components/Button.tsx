@@ -27,30 +27,22 @@ const getButtonClassName = (theme: string) => {
 const Button = ({ onClick: click, theme = "dark", ...props }: ButtonProps) => {
   const className: string = getButtonClassName(theme);
 
-  const [loadings, setLoadings] = useState<boolean[]>([]);
+  const [loadings, setLoadings] = useState<boolean>(false);
 
-  const enterLoading = (index: number) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
+  const enterLoading = () => {
+    setLoadings(true);
 
     setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
+      setLoadings(false);
     }, 3000);
   };
 
   return (
     <AntDButton
       className={buttonstyle[className]}
-      loading={loadings[0]}
+      loading={loadings}
       onClick={(e) => {
-        enterLoading(0);
+        enterLoading();
         if (click) {
           click(e);
         }
